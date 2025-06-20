@@ -8,37 +8,33 @@ import { useRef } from "react"
 const skills = [
   {
     category: "FRONTEND_CORE",
-    technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    technologies: ["React", "Laravel", "Tailwind CSS", "TypeScript", "Framer Motion"],
     icon: Code2,
-    color: "from-cyan-500 to-blue-500",
-    level: 95,
+    color: "from-cyan-500 to-blue-500"
   },
   {
     category: "BACKEND_SYSTEMS",
-    technologies: ["Node.js", "Express", "PostgreSQL", "MongoDB", "Prisma"],
+    technologies: ["MySQL", "PostgreSQL", "Node.js"],
     icon: Rocket,
-    color: "from-green-500 to-emerald-500",
-    level: 88,
+    color: "from-green-500 to-emerald-500"
   },
   {
     category: "DESIGN_MATRIX",
-    technologies: ["Figma", "Adobe XD", "Photoshop", "UI/UX Design", "Prototyping"],
+    technologies: ["Figma", "Adobe XD", "UI/UX Design", "Prototyping"],
     icon: Palette,
-    color: "from-purple-500 to-pink-500",
-    level: 82,
+    color: "from-purple-500 to-pink-500"
   },
   {
     category: "DEV_TOOLS",
     technologies: ["Git", "Docker", "AWS", "Vercel", "VS Code"],
     icon: Users,
-    color: "from-orange-500 to-red-500",
-    level: 90,
+    color: "from-orange-500 to-red-500"
   },
 ]
 
 const personalStats = [
-  { label: "LOCATION", value: "Jakarta, Indonesia", icon: Shield },
-  { label: "EXPERIENCE", value: "3+ Years", icon: Zap },
+  { label: "LOCATION", value: "Surabaya, Indonesia", icon: Shield },
+  { label: "EXPERIENCE", value: "1 Years", icon: Zap },
   { label: "EDUCATION", value: "S1 Teknik Informatika", icon: Cpu },
   { label: "STATUS", value: "Available for Hire", icon: Heart },
 ]
@@ -211,25 +207,7 @@ export function About() {
                       <skill.icon className="w-8 h-8 text-white" />
                     </div>
 
-                    <h4 className="text-lg font-bold text-white mb-2 font-mono">{skill.category}</h4>
-
-                    {/* Skill Level Bar */}
-                    <div className="mb-4">
-                      <div className="flex justify-between text-xs text-slate-400 mb-1">
-                        <span>PROFICIENCY</span>
-                        <span>{skill.level}%</span>
-                      </div>
-                      <div className="w-full bg-slate-700 rounded-full h-2">
-                        <motion.div
-                          className={`h-2 bg-gradient-to-r ${skill.color} rounded-full`}
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${skill.level}%` }}
-                          transition={{ duration: 1, delay: index * 0.2 }}
-                          viewport={{ once: true }}
-                        />
-                      </div>
-                    </div>
-
+                    <h4 className="text-lg font-bold text-white mb-4 font-mono">{skill.category}</h4>
                     <div className="space-y-2">
                       {skill.technologies.map((tech) => (
                         <motion.span

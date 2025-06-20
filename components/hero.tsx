@@ -1,22 +1,35 @@
 "use client"
 
+import * as React from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { TypeAnimation } from "react-type-animation"
 import { ArrowDown, Zap, Shield, Cpu, Code, Palette, Rocket } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { useRef } from "react"
+import { useRef, useEffect } from "react"
 
 export function Hero() {
-  const ref = useRef(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const [isMounted, setIsMounted] = React.useState(false)
+  
+  // Initialize scroll effects after mount
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: isMounted ? sectionRef : undefined,
     offset: ["start start", "end start"],
+    layoutEffect: false
   })
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0])
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8])
+  const y = useTransform(scrollYProgress || 0, [0, 1], ["0%", "50%"])
+  const opacity = useTransform(scrollYProgress || 0, [0, 1], [1, 0])
+  const scale = useTransform(scrollYProgress || 0, [0, 1], [1, 0.8])
+  
+  React.useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  useEffect(() => {
+    console.log('Mencoba load gambar dari:', '/profile-photo.jpg')
+  }, [])
 
   const scrollToProjects = () => {
     document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })
@@ -24,34 +37,48 @@ export function Hero() {
 
   // Floating animation variants
   const floatingVariants = {
-    animate: {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
       y: [0, -20, 0],
+      opacity: 1,
       transition: {
         duration: 6,
         repeat: Number.POSITIVE_INFINITY,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
       },
     },
   }
 
   const pulseVariants = {
-    animate: {
+    hidden: { opacity: 0.7, scale: 1 },
+    visible: {
       scale: [1, 1.05, 1],
       opacity: [0.7, 1, 0.7],
       transition: {
         duration: 4,
         repeat: Number.POSITIVE_INFINITY,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
       },
     },
   }
 
+  if (!isMounted) {
+    return (
+      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800">
+        <div className="container mx-auto px-6">
+          <div className="h-screen flex items-center justify-center">
+            <div className="animate-pulse text-white">Loading...</div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
-    <motion.section
-      ref={ref}
-      id="intro"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden noise-bg"
-      style={{ y, opacity, scale }}
+    <motion.section 
+      ref={sectionRef}
+      className="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800"
+      style={{ position: 'relative' }}
     >
       {/* Animated Background */}
       <motion.div
@@ -72,6 +99,19 @@ export function Hero() {
         animate={{ opacity: [0.05, 0.15, 0.05] }}
         transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
       >
+        <div
+          className="absolute inset-0 overflow-hidden pointer-events-none"
+          style={{
+            opacity: 0.1,
+            background:
+              "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.5) 0%, transparent 40%)",
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0
+          }}
+        />
         <div
           className="absolute inset-0"
           style={{
@@ -130,8 +170,8 @@ export function Hero() {
           transition={{ duration: 1.5 }}
           className="max-w-7xl mx-auto"
         >
-          <div className="flex flex-col lg:flex-row items-center justify-center gap-16">
-            {/* Profile Section */}
+          <div className="flex flex-col lg:flex-row items-start justify-between gap-12">
+            {/* Profile Section - Moved to left */}
             <motion.div
               initial={{ opacity: 0, x: -100, scale: 0.8 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -141,9 +181,8 @@ export function Hero() {
                 type: "spring",
                 stiffness: 100,
               }}
-              className="relative"
+              className="relative lg:order-1"
               variants={floatingVariants}
-              animate="animate"
             >
               <div className="relative w-72 h-72 lg:w-96 lg:h-96">
                 {/* Holographic Frame */}
@@ -187,17 +226,30 @@ export function Hero() {
 
                 {/* Profile Image */}
                 <motion.div
-                  className="relative w-full h-full overflow-hidden rounded-lg"
+                  className="relative w-full h-full overflow-hidden rounded-lg bg-slate-800"
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <Image
-                    src="/placeholder.svg?height=400&width=400"
-                    alt="Profile"
-                    fill
-                    className="object-cover filter brightness-110 contrast-110"
-                    priority
-                  />
+
+                  <div className="relative w-full h-full flex items-center justify-center bg-slate-800 rounded-lg overflow-hidden" style={{ position: 'relative' }}>
+                    <div className="absolute inset-0">
+                      <Image
+                        src={"/profile.jpg"}
+                        alt="Profile"
+                        width={400}
+                        height={400}
+                        className="w-full h-full object-cover"
+                        priority
+                        unoptimized={true}
+                        onError={(e) => {
+                          console.error('Gagal memuat gambar:', e);
+                          // Fallback ke placeholder
+                          e.currentTarget.src = '/placeholder-user.jpg';
+                        }}
+                      />
+                    </div>
+                    {/* Removed debug overlay */}
+                  </div>
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"
                     animate={{ opacity: [0.3, 0.6, 0.3] }}
@@ -209,17 +261,21 @@ export function Hero() {
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-400/20 to-transparent h-8"
                   animate={{ y: [0, 350, 0] }}
-                  transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                 />
               </div>
 
               {/* Status Indicators */}
-              <div className="absolute -right-4 top-4 space-y-2">
+              <motion.div 
+                className="absolute -right-4 top-4 space-y-2"
+                variants={pulseVariants}
+              >
                 {[
                   { icon: Zap, color: "text-yellow-400", label: "Active" },
                   { icon: Shield, color: "text-green-400", label: "Secure" },
                   { icon: Cpu, color: "text-blue-400", label: "Processing" },
                 ].map(({ icon: Icon, color, label }, i) => (
+// ... (kode sebelumnya)
                   <motion.div
                     key={label}
                     className={`flex items-center space-x-2 bg-slate-900/80 backdrop-blur-sm px-3 py-1 rounded-full border border-indigo-400/30 ${color}`}
@@ -241,11 +297,11 @@ export function Hero() {
                     <span className="text-xs font-mono">{label}</span>
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </motion.div>
 
             {/* Content Section */}
-            <div className="flex-1 text-center lg:text-left max-w-2xl">
+            <div className="flex-1 lg:order-2 text-left max-w-2xl">
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -272,19 +328,28 @@ export function Hero() {
                     className="gradient-text"
                     animate={{
                       backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                      textShadow: "0 0 0px rgba(99, 102, 241, 0)"
                     }}
-                    transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY }}
+                    whileHover={{
+                      textShadow: "0 0 20px rgba(99, 102, 241, 0.8)"
+                    }}
+                    transition={{ 
+                      duration: 5, 
+                      repeat: Number.POSITIVE_INFINITY,
+                      textShadow: { duration: 0.3 }
+                    }}
                     style={{
                       backgroundSize: "200% 200%",
+                      textShadow: "0 0 0px rgba(99, 102, 241, 0)"
                     }}
                   >
-                    NAMA ANDA
+                    ZARIRUL
                   </motion.span>
                 </motion.h1>
 
                 {/* Subtitle with Typewriter */}
                 <motion.div
-                  className="text-xl md:text-2xl text-indigo-300 font-medium"
+                  className="text-xl md:text-2xl text-indigo-300 font-medium -mt-8"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.5 }}
@@ -322,15 +387,22 @@ export function Hero() {
                       key={label}
                       className="flex flex-col items-center group cursor-pointer"
                       initial={{ opacity: 0, y: 20, scale: 0.8 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ delay: 2 + index * 0.2 }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        transition: { 
+                          delay: 2 + index * 0.2,
+                          type: "spring",
+                          stiffness: 100
+                        }
+                      }}
                       whileHover={{
                         scale: 1.1,
                         y: -5,
                         transition: { type: "spring", stiffness: 400 },
                       }}
                       variants={pulseVariants}
-                      animate="animate"
                     >
                       <motion.div
                         className={`w-14 h-14 bg-gradient-to-br ${color} rounded-full flex items-center justify-center mb-2 shadow-lg`}
@@ -349,7 +421,7 @@ export function Hero() {
 
                 {/* Description */}
                 <motion.p
-                  className="text-lg text-slate-300 leading-relaxed font-light max-w-xl"
+                  className="text-lg text-slate-300 leading-relaxed font-light max-w-xl -mt-10"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 2.2 }}

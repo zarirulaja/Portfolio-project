@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
-import { ExternalLink, Github, Play, Zap, Lock, Database, Star } from "lucide-react"
+import { ExternalLink, Github, Play, Zap, Lock, Database, Star, Cpu, Code2, Palette } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useState } from "react"
@@ -11,62 +11,49 @@ import { useState } from "react"
 const projects = [
   {
     id: 1,
-    title: "E-Commerce Platform",
-    subtitle: "Modern Shopping Experience",
+    title: "Sistem Rekrutmen Karyawan",
+    subtitle: "Aplikasi Rekrutmen Berbasis Web",
     description:
-      "Platform e-commerce dengan fitur AI recommendations, real-time analytics, dan sistem pembayaran yang aman dan terintegrasi.",
-    image: "/placeholder.svg?height=400&width=600",
-    technologies: ["React", "Node.js", "PostgreSQL", "Stripe"],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com/username/project",
+      "Sistem rekrutmen karyawan berbasis web yang dibangun dengan Laravel dan MySQL, menawarkan manajemen pelamar, jadwal interview, dan tracking kandidat.",
+    image: "/projects/recruitment.jpg",
+    technologies: ["Laravel", "MySQL", "PHP", "TailwindCSS"],
+    liveUrl: "https://rekruitmen-karyawan-production.up.railway.app/",
+    githubUrl: "https://github.com/zarirulaja/rekruitmen-karyawan.git",
     status: "Live",
-    classification: "Commercial",
+    classification: "Web Application",
     featured: true,
-    rating: 4.8,
+    rating: 4.5,
   },
   {
     id: 2,
-    title: "Task Management App",
-    subtitle: "Collaborative Productivity",
+    title: "Easy Timer",
+    subtitle: "Aplikasi Stopwatch Sederhana",
     description:
-      "Aplikasi manajemen tugas dengan real-time collaboration, advanced scheduling, dan AI-powered productivity insights.",
-    image: "/placeholder.svg?height=400&width=600",
-    technologies: ["Next.js", "TypeScript", "Prisma", "Socket.io"],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com/username/project",
-    status: "Beta",
-    classification: "SaaS",
+      "Aplikasi stopwatch sederhana yang dibangun dengan Python Tkinter, menawarkan antarmuka yang mudah digunakan dengan fungsi dasar stopwatch.",
+    image: "/projects/timer.jpg",
+    technologies: ["Python", "Tkinter"],
+    liveUrl: "https://bisa.ai/portofolio/detail/NjQ0OA",
+    githubUrl: "",
+    status: "Demo",
+    classification: "Desktop Application",
     featured: true,
-    rating: 4.6,
+    rating: 4.0,
   },
   {
     id: 3,
-    title: "Weather Dashboard",
-    subtitle: "Atmospheric Intelligence",
-    description: "Dashboard cuaca dengan visualisasi data real-time, prediksi akurat, dan interface yang intuitif.",
-    image: "/placeholder.svg?height=400&width=600",
-    technologies: ["Vue.js", "D3.js", "OpenWeather API", "Chart.js"],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com/username/project",
-    status: "Stable",
-    classification: "Open Source",
-    featured: false,
-    rating: 4.4,
-  },
-  {
-    id: 4,
-    title: "Portfolio Website",
-    subtitle: "Digital Identity",
-    description: "Portfolio interaktif dengan animasi modern, responsive design, dan performance yang optimal.",
-    image: "/placeholder.svg?height=400&width=600",
-    technologies: ["Next.js", "Framer Motion", "Tailwind CSS", "TypeScript"],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com/username/project",
-    status: "Active",
-    classification: "Personal",
-    featured: false,
-    rating: 4.9,
-  },
+    title: "Sistem Monitoring Suhu",
+    subtitle: "Monitoring Suhu Real-time dengan ESP32",
+    description:
+      "Sistem monitoring suhu menggunakan sensor DHT22 dan ESP32, dengan backend cloud untuk visualisasi data suhu dan kelembaban secara real-time.",
+    image: "/projects/temp-monitor.jpg",
+    technologies: ["ESP32", "DHT22", "C", "Cloud Computing"],
+    liveUrl: "https://bisa.ai/portofolio/detail/NjEyMg",
+    githubUrl: "",
+    status: "Demo",
+    classification: "IoT Project",
+    featured: true,
+    rating: 4.3,
+  }
 ]
 
 const containerVariants = {
@@ -205,10 +192,17 @@ function ProjectCard({ project, featured = false }: { project: any; featured?: b
   }
 
   const classificationIcons = {
-    Commercial: Database,
-    SaaS: Zap,
-    "Open Source": Lock,
-    Personal: Play,
+    "Web Application": Code2,
+    "Desktop Application": Cpu,
+    "IoT Project": Cpu,
+    "Mobile App": Cpu,
+    "API Service": Cpu,
+    "CLI Tool": Cpu,
+    "Game Development": Cpu,
+    "Data Science": Cpu,
+    "DevOps": Cpu,
+    "UI/UX Design": Palette,
+    "Other": Code2
   }
 
   const ClassificationIcon = classificationIcons[project.classification as keyof typeof classificationIcons]
@@ -291,22 +285,34 @@ function ProjectCard({ project, featured = false }: { project: any; featured?: b
             animate={isHovered ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
           >
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-              <Button
-                size="sm"
-                className="bg-slate-800/80 backdrop-blur-sm border border-indigo-400/50 hover:bg-indigo-600/50 transition-all duration-300"
-              >
-                <ExternalLink className="w-4 h-4" />
-              </Button>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-              <Button
-                size="sm"
-                className="bg-slate-800/80 backdrop-blur-sm border border-indigo-400/50 hover:bg-indigo-600/50 transition-all duration-300"
-              >
-                <Github className="w-4 h-4" />
-              </Button>
-            </motion.div>
+            {project.liveUrl && (
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                <Button
+                  size="sm"
+                  className="bg-slate-800/80 backdrop-blur-sm border border-indigo-400/50 hover:bg-indigo-600/50 transition-all duration-300"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
+                  }}
+                >
+                  <ExternalLink className="w-4 h-4" />
+                </Button>
+              </motion.div>
+            )}
+            {project.githubUrl && (
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                <Button
+                  size="sm"
+                  className="bg-slate-800/80 backdrop-blur-sm border border-indigo-400/50 hover:bg-indigo-600/50 transition-all duration-300"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(project.githubUrl, '_blank', 'noopener,noreferrer');
+                  }}
+                >
+                  <Github className="w-4 h-4" />
+                </Button>
+              </motion.div>
+            )}
           </motion.div>
         </div>
 
@@ -341,25 +347,37 @@ function ProjectCard({ project, featured = false }: { project: any; featured?: b
 
           {/* Actions */}
           <div className="flex space-x-3 pt-2">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                size="sm"
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 font-medium text-xs shadow-lg hover:shadow-indigo-500/25 transition-all duration-300"
-              >
-                <Play className="w-3 h-3 mr-2" />
-                View Live
-              </Button>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                size="sm"
-                variant="outline"
-                className="border-indigo-400/30 text-indigo-300 hover:bg-indigo-500/10 hover:border-indigo-400/60 font-medium text-xs transition-all duration-300"
-              >
-                <Github className="w-3 h-3 mr-2" />
-                Source
-              </Button>
-            </motion.div>
+            {project.liveUrl && (
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  size="sm"
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 font-medium text-xs shadow-lg hover:shadow-indigo-500/25 transition-all duration-300"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
+                  }}
+                >
+                  <Play className="w-3 h-3 mr-2" />
+                  View Live
+                </Button>
+              </motion.div>
+            )}
+            {project.githubUrl && (
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(project.githubUrl, '_blank', 'noopener,noreferrer');
+                  }}
+                  className="border-indigo-400/30 text-indigo-300 hover:bg-indigo-500/10 hover:border-indigo-400/60 font-medium text-xs transition-all duration-300"
+                >
+                  <Github className="w-3 h-3 mr-2" />
+                  Source
+                </Button>
+              </motion.div>
+            )}
           </div>
         </CardContent>
 

@@ -1,50 +1,43 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Github, Instagram, Youtube, Linkedin, Mail, Twitter, MessageCircle } from "lucide-react"
+import { Github, Instagram, Youtube, Mail, MessageCircle } from "lucide-react"
 
 const socialLinks = [
   {
     name: "GitHub",
     icon: Github,
-    url: "https://github.com/username",
+    url: "https://github.com/zarirulaja",
     color: "hover:text-slate-300",
-    description: "CODE_REPOSITORY",
+    description: "My Code & Projects",
   },
   {
     name: "Instagram",
     icon: Instagram,
-    url: "https://instagram.com/username",
+    url: "https://www.instagram.com/zarirul_/",
     color: "hover:text-pink-400",
-    description: "VISUAL_FEED",
+    description: "My Daily Life",
   },
   {
     name: "YouTube",
     icon: Youtube,
-    url: "https://youtube.com/@username",
+    url: "https://www.youtube.com/@izza6426",
     color: "hover:text-red-400",
-    description: "VIDEO_CONTENT",
+    description: "My Videos & Tutorials",
   },
   {
-    name: "LinkedIn",
-    icon: Linkedin,
-    url: "https://linkedin.com/in/username",
-    color: "hover:text-blue-400",
-    description: "PROFESSIONAL_NET",
-  },
-  {
-    name: "Twitter",
-    icon: Twitter,
-    url: "https://twitter.com/username",
-    color: "hover:text-blue-300",
-    description: "THOUGHT_STREAM",
+    name: "WhatsApp",
+    icon: MessageCircle,
+    url: "https://wa.me/6285904390140",
+    color: "hover:text-green-400",
+    description: "Contact Me Directly",
   },
   {
     name: "Email",
     icon: Mail,
-    url: "mailto:your.email@example.com",
-    color: "hover:text-green-400",
-    description: "DIRECT_COMM",
+    url: "mailto:izzaahmad73@gmail.com",
+    color: "hover:text-amber-400",
+    description: "Send Me an Email",
   },
 ]
 
@@ -89,7 +82,7 @@ export function SocialLinks() {
         </motion.div>
 
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12 max-w-4xl mx-auto"
+          className="flex flex-wrap justify-center gap-6 mb-12 max-w-4xl mx-auto"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -108,7 +101,7 @@ export function SocialLinks() {
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`relative flex flex-col items-center justify-center p-6 bg-slate-900/50 border border-indigo-400/30 backdrop-blur-sm text-slate-400 transition-all duration-300 ${social.color} hover:border-current hover:shadow-lg hover:shadow-current/25 glow-border group-hover:bg-slate-800/70`}
+                className={`relative flex flex-col items-center justify-center p-6 w-32 h-32 bg-slate-900/50 border border-indigo-400/30 backdrop-blur-sm text-slate-400 transition-all duration-300 ${social.color} hover:border-current hover:shadow-lg hover:shadow-current/25 glow-border group-hover:bg-slate-800/70`}
                 whileHover={{ y: -5, scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -118,9 +111,11 @@ export function SocialLinks() {
                 <div className="absolute bottom-1 left-1 w-3 h-3 border-l-2 border-b-2 border-current opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div className="absolute bottom-1 right-1 w-3 h-3 border-r-2 border-b-2 border-current opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                <social.icon className="w-8 h-8 mb-3" />
-                <span className="text-xs font-mono font-bold">{social.description}</span>
-                <span className="text-xs text-slate-500 mt-1">{social.name}</span>
+                <div className="flex flex-col items-center justify-center h-full">
+                  <social.icon className="w-8 h-8 mb-3" />
+                  <span className="text-xs font-mono font-bold text-center">{social.description}</span>
+                  <span className="text-xs text-slate-500 mt-1">{social.name}</span>
+                </div>
 
                 {/* Scanning Line */}
                 <motion.div
@@ -161,7 +156,7 @@ export function SocialLinks() {
           className="border-t border-indigo-400/20 pt-8"
         >
           <div className="flex flex-col md:flex-row justify-between items-center text-slate-500 text-sm font-mono">
-            <p>&copy; 2024 NAMA_ANDA. All systems operational.</p>
+            <p>&copy; 2025 ZARIRUL. All systems operational.</p>
             <p className="mt-2 md:mt-0">Built with Next.js • Powered by imagination</p>
           </div>
         </motion.div>
