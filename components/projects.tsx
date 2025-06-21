@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { ExternalLink, Github, Play, Zap, Lock, Database, Star, Cpu, Code2, Palette } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -97,16 +96,16 @@ export function Projects() {
         transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY }}
       />
 
-      <div className="container mx-auto relative z-10">
+      <div className="container mx-auto relative z-10 px-4 sm:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-50px" }}
+          className="text-center mb-12 sm:mb-16 px-2"
         >
           <motion.h2
-            className="text-5xl md:text-6xl font-display font-black mb-6 text-white"
+            className="text-4xl sm:text-5xl md:text-6xl font-display font-black mb-4 sm:mb-6 text-white"
             animate={{
               textShadow: [
                 "0 0 20px rgba(99, 102, 241, 0.5)",
@@ -119,11 +118,11 @@ export function Projects() {
             <span className="gradient-text">Featured Projects</span>
           </motion.h2>
           <motion.p
-            className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            viewport={{ once: true, margin: "-50px" }}
           >
             A showcase of innovative solutions and creative implementations that demonstrate my passion for building
             exceptional digital experiences.
@@ -132,16 +131,16 @@ export function Projects() {
 
         {/* Featured Projects */}
         <motion.div
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-12"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-50px" }}
         >
           {projects
             .filter((p) => p.featured)
             .map((project) => (
-              <motion.div key={project.id} variants={itemVariants}>
+              <motion.div key={project.id} variants={itemVariants} className="w-full">
                 <ProjectCard project={project} featured />
               </motion.div>
             ))}
@@ -149,16 +148,16 @@ export function Projects() {
 
         {/* Regular Projects */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-6"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-50px" }}
         >
           {projects
             .filter((p) => !p.featured)
             .map((project) => (
-              <motion.div key={project.id} variants={itemVariants}>
+              <motion.div key={project.id} variants={itemVariants} className="w-full">
                 <ProjectCard project={project} />
               </motion.div>
             ))}
@@ -168,7 +167,27 @@ export function Projects() {
   )
 }
 
-function ProjectCard({ project, featured = false }: { project: any; featured?: boolean }) {
+interface Project {
+  id: number;
+  title: string;
+  subtitle: string;
+  description: string;
+  image: string;
+  technologies: string[];
+  liveUrl: string;
+  githubUrl: string;
+  status: string;
+  classification: string;
+  featured: boolean;
+  rating: number;
+}
+
+interface ProjectCardProps {
+  project: Project;
+  featured?: boolean;
+}
+
+function ProjectCard({ project, featured = false }: ProjectCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -209,32 +228,38 @@ function ProjectCard({ project, featured = false }: { project: any; featured?: b
 
   return (
     <motion.div
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      style={{ transformStyle: "preserve-3d" }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      whileHover={{ z: 50 }}
-      className="group perspective-1000"
+      onTouchStart={() => setIsHovered(prev => !prev)}
+      className="group perspective-1000 w-full"
     >
-      <Card className="bg-slate-900/50 border border-indigo-400/30 backdrop-blur-sm overflow-hidden relative transition-all duration-500 hover:border-indigo-400/60">
+      <Card className="bg-slate-900/50 border border-indigo-400/30 backdrop-blur-sm overflow-hidden relative transition-all duration-300 sm:hover:border-indigo-400/60 h-full">
         {/* Header */}
         <motion.div
-          className="p-4 border-b border-indigo-400/20 bg-slate-800/50"
+          className="p-3 sm:p-4 border-b border-indigo-400/20 bg-slate-800/50"
           animate={isHovered ? { backgroundColor: "rgba(30, 27, 75, 0.7)" } : {}}
         >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <motion.div animate={isHovered ? { rotate: 360 } : {}} transition={{ duration: 0.6 }}>
-                <ClassificationIcon className="w-4 h-4 text-indigo-400" />
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <motion.div 
+                animate={isHovered ? { rotate: 360 } : {}} 
+                transition={{ duration: 0.6 }}
+                className="flex-shrink-0"
+              >
+                <ClassificationIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-400" />
               </motion.div>
-              <span className="text-xs font-medium text-slate-400">{project.classification}</span>
-              <div className="flex items-center space-x-1">
-                <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                <span className="text-xs text-yellow-400 font-medium">{project.rating}</span>
+              <span className="text-[11px] sm:text-xs font-medium text-slate-400 truncate max-w-[120px] sm:max-w-none">
+                {project.classification}
+              </span>
+              <div className="flex items-center space-x-1 flex-shrink-0">
+                <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-yellow-400 fill-current" />
+                <span className="text-[11px] sm:text-xs text-yellow-400 font-medium">{project.rating}</span>
               </div>
             </div>
             <motion.div
-              className={`px-3 py-1 rounded-full border text-xs font-medium ${statusColors[project.status as keyof typeof statusColors]}`}
+              className={`px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border text-[10px] sm:text-xs font-medium whitespace-nowrap ${statusColors[project.status as keyof typeof statusColors]}`}
               animate={isHovered ? { scale: 1.05 } : { scale: 1 }}
             >
               {project.status}
@@ -243,7 +268,7 @@ function ProjectCard({ project, featured = false }: { project: any; featured?: b
         </motion.div>
 
         {/* Image */}
-        <div className="relative overflow-hidden h-48 md:h-56">
+        <div className="relative overflow-hidden h-40 sm:h-48 md:h-56">
           <motion.img
             src={project.image}
             alt={project.title}
@@ -281,7 +306,7 @@ function ProjectCard({ project, featured = false }: { project: any; featured?: b
 
           {/* Action Buttons */}
           <motion.div
-            className="absolute top-4 right-4 flex space-x-2"
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 flex space-x-1 sm:space-x-2"
             animate={isHovered ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
           >
@@ -316,68 +341,52 @@ function ProjectCard({ project, featured = false }: { project: any; featured?: b
           </motion.div>
         </div>
 
-        <CardContent className="p-6 space-y-4">
-          <div>
-            <motion.h3
-              className="text-xl font-bold text-white font-display mb-1 group-hover:text-indigo-300 transition-colors"
-              whileHover={{ x: 5 }}
-            >
-              {project.title}
-            </motion.h3>
-            <p className="text-sm text-indigo-400 font-medium">{project.subtitle}</p>
-          </div>
-
-          <p className="text-slate-300 text-sm leading-relaxed">{project.description}</p>
-
-          {/* Technologies */}
-          <div className="flex flex-wrap gap-2">
-            {project.technologies.map((tech: string, index: number) => (
-              <motion.span
-                key={tech}
-                className="px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full text-xs font-medium border border-indigo-500/30 hover:bg-indigo-500/30 transition-colors cursor-default"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05, y: -2 }}
-              >
-                {tech}
-              </motion.span>
-            ))}
-          </div>
-
-          {/* Actions */}
-          <div className="flex space-x-3 pt-2">
-            {project.liveUrl && (
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <CardContent className="p-6 space-y-4 sm:p-8">
+          <div className="p-3 sm:p-4">
+            <div className="flex items-start justify-between mb-2 sm:mb-3">
+              <div className="pr-2">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-0.5 sm:mb-1 line-clamp-1">{project.title}</h3>
+                <p className="text-xs sm:text-sm text-slate-400 line-clamp-1">{project.subtitle}</p>
+              </div>
+              {featured && (
+                <div className="bg-indigo-500/20 text-indigo-400 text-[10px] sm:text-xs font-medium px-2 py-0.5 sm:px-3 sm:py-1 rounded-full whitespace-nowrap">
+                  Featured
+                </div>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-2 mt-3">
+              {project.technologies.map((tech, index) => (
+                <motion.span
+                  key={tech}
+                  className="px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full text-xs font-medium border border-indigo-500/30 hover:bg-indigo-500/30 transition-colors cursor-default"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                >
+                  {tech}
+                </motion.span>
+              ))}
+            </div>
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center space-x-1.5 sm:space-x-2">
+                <span className="text-[10px] sm:text-xs text-slate-500 whitespace-nowrap">
+                  {project.status === 'Live' ? 'Live on' : 'Demo at'}
+                </span>
                 <Button
+                  variant="ghost"
                   size="sm"
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 font-medium text-xs shadow-lg hover:shadow-indigo-500/25 transition-all duration-300"
+                  className="text-[10px] sm:text-xs text-indigo-400 hover:text-indigo-300 transition-colors flex items-center truncate max-w-[120px] sm:max-w-none border border-indigo-400/30 hover:bg-indigo-500/10 hover:border-indigo-400/60 font-medium h-auto py-1 px-2"
                   onClick={(e) => {
                     e.stopPropagation();
                     window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
                   }}
                 >
-                  <Play className="w-3 h-3 mr-2" />
-                  View Live
-                </Button>
-              </motion.div>
-            )}
-            {project.githubUrl && (
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    window.open(project.githubUrl, '_blank', 'noopener,noreferrer');
-                  }}
-                  className="border-indigo-400/30 text-indigo-300 hover:bg-indigo-500/10 hover:border-indigo-400/60 font-medium text-xs transition-all duration-300"
-                >
-                  <Github className="w-3 h-3 mr-2" />
+                  <Github className="w-3 h-3 mr-1" />
                   Source
                 </Button>
-              </motion.div>
-            )}
+              </div>
+            </div>
           </div>
         </CardContent>
 
